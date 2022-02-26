@@ -13,21 +13,22 @@ use Yii;
  *
  * @property Employee[] $employees
  */
-class Department extends \yii\db\ActiveRecord
-{
+class Department extends \yii\db\ActiveRecord {
+
+    public $view_page = '';
+    public $test_variable = '';
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'department';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['dept_name'], 'required'],
             [['dept_name'], 'string', 'max' => 100],
@@ -38,8 +39,7 @@ class Department extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'dept_name' => 'Dept Name',
@@ -52,8 +52,25 @@ class Department extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getEmployees()
-    {
+    public function getEmployees() {
         return $this->hasMany(Employee::className(), ['fk_dept_id' => 'id']);
     }
+
+    public function init() {
+        $this->view_page = 'a';
+        $this->test_variable = 'ABC';
+    }
+
+    public function initiateChild() {
+        // id = 1, dept_name = 'IT', dept_details = 'Information Tech'
+
+        if ($this->dept_name == 'IT') {
+            return ITDepartment::findOne($this->id);
+        } else if ($this->dept_name == 'Support') {
+            return SupportDepartment::findOne($this->id);
+        } else {
+            return OtherDepartment::findOne($this->id);
+        }
+    }
+
 }

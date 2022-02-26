@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\department;
+use app\models\Department;
 
 /**
- * departmentSearch represents the model behind the search form of `app\models\department`.
+ * DepartmentSearch represents the model behind the search form of `app\models\Department`.
  */
-class departmentSearch extends department
+class DepartmentSearch extends Department
 {
     /**
      * {@inheritdoc}
@@ -40,13 +40,14 @@ class departmentSearch extends department
      */
     public function search($params)
     {
-        $query = department::find();
+        $query = Department::find()->select('*')->join('left join','employee e','e.id=department.id');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        
 
         $this->load($params);
 
